@@ -1,4 +1,4 @@
-buildscript {
+buildscript { // 이 프로젝트의 플러그인 의존성 관리를 위한 설정
     ext{
         springBootVersion = '2.1.7.RELEASE'
     }
@@ -11,22 +11,35 @@ buildscript {
     }
 }
 
+// 위에 선언한 플러그인 의존성들을 적용할 것인지를 결정하는 코드
+// 아래 4개의 플러그인은 자바와 스프링 부트를 사용하기위해서는 필수 플러그인이니 항상 추가하면 된다.
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+apply plugin: 'io.spring.dependency-management' // 스프링 부트의 의존성들을 관리해주는 플러그인이라 꼭 추가해야함.
 
 group 'com.chohongjae.book'
 version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
+    // 각종 의존성(라이브러리)들을 어떤 원격 저장소에서 받을지를 정한다. 기본적으로 mavenCentral()을 많이 사용하지만 최근에는 업로드 난이도 때문에 jcenter()를 많이 사용한다.
+    // jcenter() 에 업로드하면 mavenCentral() 에도 업로드된다.
     mavenCentral()
     jcenter()
 }
 
 dependencies {
+    // 프로젝트 개발에 필요한 의존성들을 선언하는 곳
+    // 버전을 명시하지 않아야만 맨위에서 작성한 springBootVersion 의 버전을 따라가게 된다.
 //    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile('org.springframework.boot:spring-boot-starter-test')
     compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.projectlombok:lombok')
+
+
+    compile('org.springframework.boot:spring-boot-starter-data-jpa') // 스프링 부트용 spring data jpa 추상화 라이브러리, 스프링 부트 버전에 맞춰 자동으로 jpa 관련 라이브러리들을 관리해준다.
+    compile('com.h2database:h2')  // 인메모리 관계형 데이터베이스, 메모리에서 실행된다.
+
+    compile('org.springframework.boot:spring-boot-starter-mustache')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 }
